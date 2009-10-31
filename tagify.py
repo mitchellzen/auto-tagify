@@ -1,4 +1,4 @@
-import cgi, re
+import re
 
 def tagify(text):
   return remove_stop_words(remove_ctrl_chars(text).split(' '))
