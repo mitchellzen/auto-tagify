@@ -25,12 +25,7 @@ class AutoTagifyTestCase(unittest.TestCase):
 	  """
 	  a = AutoTagify()
 	  a.text = 'This is a test with other valid taggable items'
-	  test_array = []
-	  test_array.append('test')
-	  test_array.append('other')
-	  test_array.append('valid')
-	  test_array.append('taggable')
-	  test_array.append('items')
+	  test_array = ['test', 'other', 'valid', 'taggable', 'items']
 	  self.assertEqual(a.tag_list(), test_array)
 	  
 if __name__ == "__main__":
