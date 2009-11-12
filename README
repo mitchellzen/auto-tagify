@@ -23,7 +23,7 @@ t.css = "tagged"
 t.generate()
  
 The result will be: This is the <a href="/tags/text" class="tagged">text</a> to <a
-href="/tags/display">display!</a>
+href="/tags/display" class="tagged">display!</a>
  
 If no link is set, the default path is "/<tagged word>", such as "/text".
  
