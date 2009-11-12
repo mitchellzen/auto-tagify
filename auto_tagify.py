@@ -1,7 +1,7 @@
 import re
 
-class auto_tagify():
-  stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)')
+class AutoTagify():
+  stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)|(with)')
   eol = re.compile('[\r\n\t]')
   clean_word = re.compile('[\[\],().;:"\'?!*&<>/\+={}`~]')
   clean_link = re.compile('(?<=^\/)\/+|\/+$')
@@ -29,7 +29,7 @@ class auto_tagify():
 
     for word in self.eol.sub(' ',self.text).split(' '):
       tag_word = self.clean_word.sub('',word).lower()
-      if len(tag_word) >= self.min_word_length and not self.stop_word.match(word):
+      if len(tag_word) >= self.min_word_length and not self.stop_word.match(tag_word):
         tag_words.append(tag_word)
  
     return tag_words
