@@ -7,22 +7,24 @@ class AutoTagifyTestCase(unittest.TestCase):
 		"""
 		  Verify text returns content, if text is provided and not null
 		"""
-		tagified = auto_tagify('This is a test')
-		assert tagified
+		a = auto_tagify()
+		a.text = 'This is a test'
+		assert a.generate()
 		
 	def testTextEmpty(self):
 	  """
 	    Verify sending no text returns nothing
 	  """
-	  tagified = auto_tagify('')
-	  assert tagified
+	  a = auto_tagify()
+	  assert a.generate()
 	  
 	def testTagsNotEmpty(self):
 	  """
 	    Verify that tags are returned
 	  """
-	  tagified = ('This is a test with other valid taggable items', '', True)
-	  assert tagified
+	  a = auto_tagify()
+	  a.text = 'This is a test with other valid taggable items'
+	  assert a.tag_list
 	  
 if __name__ == "__main__":
     unittest.main()

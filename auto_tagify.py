@@ -1,40 +1,35 @@
 import re
 
 class auto_tagify():
-  def __init__(self,text='',link_path='',tags_only=False,css_class=''):
-    text = re.compile('[\r\n\t]').sub(' ',text).split(' ')
-    
-    stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)')
-    
-    clean_word = re.compile('[\[\],().;:"\'?!*&<>/\+={}`~]')
-    
-    if tags_only:
-      self.__get_tag_list(text,stop_word,clean_word)
-    else:
-      self.__get_tagged_result(text,link_path,stop_word,clean_word,css_class)
-    
-  def __get_tagged_result(self,text,link_path,stop_word,clean_word,css_class):
-    tag_words = ''
-    link_path = re.compile('(\/+)$').sub('',link_path)
-    css_class = clean_word.sub('',css_class)
+  stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)')
+  eol = re.compile('[\r\n\t]')
+  clean_word = re.compile('[\[\],().;:"\'?!*&<>/\+={}`~]')
+  clean_link = re.compile('(?<=^\/)\/+|\/+$')
+  min_length = 2
   
-    for word in text:
-      tag_word = clean_word.sub('',word).lower()
+  def __init__(self):
+    self.css_class = ''
+    self.link_path = ''
+    self.text = ''
     
-      if len(tag_word) > 2 and not stop_word.match(tag_word):
-        tag_words += '<a href="'+link_path+'/'+tag_word+'" class="'+css_class+'">'+word+'</a> '
+  def generate(self):
+    tag_words = ''
+
+    for word in self.eol.sub(' ',self.text).split(' '):
+      tag_word = self.clean_word.sub('',word).lower()
+      if len(tag_word) > self.min_length and not self.stop_word.match(tag_word):
+        tag_words += '<a href="'+self.clean_link.sub('', self.link_path)+'/'+tag_word+'" class="'+self.clean_word.sub('',self.css_class)+'">'+word+'</a> '
       else:
         tag_words += word+' '
-        
+
     return tag_words
   
-  def __get_tag_list(self,text,stop_word,clean_word):
+  def tag_list(self):
     tag_words = []
-    
-    for word in text:
-      tag_word = clean_word.sub('',word).lower()
-      
-      if len(tag_word) > 2 and not stop_word.match(word):
+
+    for word in self.eol.sub(' ',self.text).split(' '):
+      tag_word = self.clean_word.sub('',word).lower()
+      if len(tag_word) > self.min_length and not self.stop_word.match(word):
         tag_words.append(tag_word)
  
     return tag_words

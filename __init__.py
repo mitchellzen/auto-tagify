@@ -1,1 +1,1 @@
-from tagify import tagify
+from auto_tagify import auto_tagify
