@@ -1,7 +1,7 @@
 import re
 
 class auto_tagify():
-  def __init__(self,text='',link_path='',tags_only=False):
+  def __init__(self,text='',link_path='',tags_only=False,css_class=''):
     text = re.compile('[\r\n\t]').sub(' ',text).split(' ')
     
     stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)')
@@ -11,17 +11,18 @@ class auto_tagify():
     if tags_only:
       self.__get_tag_list(text,stop_word,clean_word)
     else:
-      self.__get_tagged_result(text,link_path,stop_word,clean_word)
+      self.__get_tagged_result(text,link_path,stop_word,clean_word,css_class)
     
-  def __get_tagged_result(self,text,link_path,stop_word,clean_word):
+  def __get_tagged_result(self,text,link_path,stop_word,clean_word,css_class):
     tag_words = ''
     link_path = re.compile('(\/+)$').sub('',link_path)
+    css_class = clean_word.sub('',css_class)
   
     for word in text:
       tag_word = clean_word.sub('',word).lower()
     
       if len(tag_word) > 2 and not stop_word.match(tag_word):
-        tag_words += '<a href="'+link_path+'/'+tag_word+'">'+word+'</a> '
+        tag_words += '<a href="'+link_path+'/'+tag_word+'" class="'+css_class+'">'+word+'</a> '
       else:
         tag_words += word+' '
         
@@ -29,7 +30,6 @@ class auto_tagify():
   
   def __get_tag_list(self,text,stop_word,clean_word):
     tag_words = []
-    tag_count_list = {}
     
     for word in text:
       tag_word = clean_word.sub('',word).lower()
