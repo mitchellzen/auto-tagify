@@ -1,7 +1,7 @@
 import re
 
 class AutoTagify():
-  stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)|(with)')
+  stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa|it)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nste]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)|(with)|(not)')
   eol = re.compile('[\r\n\t]')
   clean_word = re.compile('[\[\],().;:"\'?!*&<>/\+={}`~]')
   clean_link = re.compile('(?<=^\/)\/+|\/+$')
