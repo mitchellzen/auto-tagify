@@ -17,15 +17,15 @@ class AutoTagifyTestCase(unittest.TestCase):
 	    Verify sending no text returns nothing
 	  """
 	  a = AutoTagify()
-	  self.assertEqual(a.generate(), ' ')
+	  self.assertEqual(a.generate(), '')
 	  
 	def testTagsNotEmpty(self):
 	  """
 	    Verify that tags are returned
 	  """
 	  a = AutoTagify()
-	  a.text = 'This is a test with other valid taggable items'
-	  test_array = ['test', 'other', 'valid', 'taggable', 'items']
+	  a.text = 'This is a test with other valid tags'
+	  test_array = ['test', 'other', 'valid', 'tag']
 	  self.assertEqual(a.tag_list(), test_array)
 	  
 if __name__ == "__main__":

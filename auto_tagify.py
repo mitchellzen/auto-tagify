@@ -1,12 +1,18 @@
 import re
 import urllib
+import nltk
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
 
 class AutoTagify():
-  stop_word = re.compile('(^(th|wh|hi|sh|an|ha|wa|it)[adeisouy]$)|(^(th|wh|do|is|he)[aeionur][nstey]$)|(^(wh|th|h|w)(ere))|(^(w|sh|c)(ould))|(but)|(how)|(very)|(really)|(with)|(not)|(their)|(theyre)|(are)|(for)|(because)')
-  eol = re.compile('[\r\n\t]')
-  clean_word = re.compile('[\[\],().:"\'?!*<>/\+={}`~]')
+  clean_word = re.compile('[\[\],().:;|"\'?!*<>/\+={}@#^&`~\s]')
+  smart_quotes_s = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)')
+  smart_quotes_d = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)')
   clean_link = re.compile('(?<=^\/)\/+|\/+$')
-  min_word_length = 3
+  stop_words = ['DT', 'IN', 'TO', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB']
+  min_tag_length = 2
+  lemma = WordNetLemmatizer()
+  stem = PorterStemmer()
   
   def __init__(self):
     self.css = ''
@@ -15,28 +21,27 @@ class AutoTagify():
     
   def generate(self,strict=True):
     tag_words = ''
-
-    for word in self.eol.sub(' ',self.text).split(' '):
-      if strict:
-        tag_word = self.clean_word.sub('',word.lower())
-      else:
-        tag_word = urllib.quote(word.lower())
-      if len(tag_word) >= self.min_word_length and not self.stop_word.match(tag_word):
+    for (word, word_type) in self._tokenize():
+      tag_word = self._cleaned(word,strict)
+      if len(tag_word) > self.min_tag_length and word_type not in self.stop_words:
         tag_words += '<a href="'+self.clean_link.sub('', self.link)+'/'+urllib.quote(tag_word)+'" class="'+self.clean_word.sub('',self.css)+'">'+word+'</a> '
       else:
         tag_words += word+' '
-
     return tag_words
   
   def tag_list(self,strict=True):
     tag_words = []
-    
-    for word in self.eol.sub(' ',self.text).split(' '):
-      if strict:
-        tag_word = self.clean_word.sub('',word.lower())
-      else:
-        tag_word = urllib.quote(word.lower())
-      if len(tag_word) >= self.min_word_length and not self.stop_word.match(tag_word):
-        tag_words.append(tag_word)
- 
+    for (word, word_type) in self._tokenize():
+      tag_word = self._cleaned(word,strict)
+      if len(tag_word) > self.min_tag_length and word_type not in self.stop_words: tag_words.append(tag_word)
     return tag_words
+    
+  def _tokenize(self):
+    return nltk.pos_tag(nltk.word_tokenize(self.text))
+    
+  def _cleaned(self,word,strict):
+    lemmatized = self.stem.stem(self.lemma.lemmatize(self.clean_word.sub('',self.smart_quotes_s.sub('\'',self.smart_quotes_d.sub('"',word.lower())))))
+    if strict:
+      return lemmatized
+    else:
+      return urllib.quote(lemmatized)
