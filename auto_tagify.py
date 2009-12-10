@@ -2,17 +2,15 @@ import re
 import urllib
 import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
 
 class AutoTagify():
   clean_word = re.compile('[\[\],().:;|"\'?!*<>/\+={}@#^&`~\s]')
-  smart_quotes_s = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)')
-  smart_quotes_d = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)')
+  smart_quotes_s = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)|(&#8216;)|(&#8217;)')
+  smart_quotes_d = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)|(&#8220;)|(&#8221;)')
   clean_link = re.compile('(?<=^\/)\/+|\/+$')
   stop_words = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB']
   min_tag_length = 2
   lemma = WordNetLemmatizer()
-  stem = PorterStemmer()
   
   def __init__(self):
     self.css = ''
@@ -40,7 +38,7 @@ class AutoTagify():
     return nltk.pos_tag(nltk.word_tokenize(self.text))
     
   def __cleaned(self,word,strict):
-    lemmatized = self.stem.stem(self.lemma.lemmatize(self.clean_word.sub('',self.smart_quotes_s.sub('\'',self.smart_quotes_d.sub('"',word.lower())))))
+    lemmatized = self.lemma.lemmatize(self.clean_word.sub('',self.smart_quotes_s.sub('\'',self.smart_quotes_d.sub('"',word.lower()))))
     if strict:
       return lemmatized
     else:
