@@ -4,11 +4,12 @@ import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
 
 class AutoTagify():
-  clean_word = re.compile('[\[\],().:;|"\'?!*<>/\+={}@#^&`~]')
+  clean_word = re.compile('[\[\],().:;"\'?*%!*+=@$;#%{}`~\r\n\t]')
   smart_quotes_s = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)|(\&#8216;)|(\&#8217;)')
   smart_quotes_d = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)|(\&#8220;)|(\&#8221;)')
+  long_dash = re.compile('(\&#8212;)')
   clean_link = re.compile('(?<=^\/)\/+|\/+$')
-  stop_words = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB']
+  stop_words = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB', 'CC', 'WDT']
   min_tag_length = 2
   lemma = WordNetLemmatizer()
   
@@ -22,7 +23,7 @@ class AutoTagify():
     for (word, word_type) in self.__tokenize():
       tag_word = self.__cleaned(word,strict)
       if len(tag_word) > self.min_tag_length and word_type not in self.stop_words:
-        tag_words += '<a href="'+self.clean_link.sub('', self.link)+'/'+urllib.quote(tag_word)+'" class="'+self.clean_word.sub('',self.css)+'">'+word+'</a> '
+        tag_words += '<a href="'+self.clean_link.sub('', self.link)+'/'+urllib.quote(tag_word)+'" class="'+self.clean_word.sub('',self.css)+'">'+self.__replace_special_chars(word)+'</a> '
       else:
         tag_words += word+' '
     return tag_words
@@ -46,6 +47,9 @@ class AutoTagify():
       
   def __clean_text(self, word=''):
     if len(word) > self.min_tag_length:
-      return self.clean_word.sub('',self.smart_quotes_s.sub('\'',self.smart_quotes_d.sub('"',word.lower())))
+      return self.clean_word.sub('',self.__replace_special_chars(word.lower()))
     else:
-      return self.clean_word.sub('',self.smart_quotes_s.sub('\'',self.smart_quotes_d.sub('"',self.text)))
+      return self.clean_word.sub('',self.__replace_special_chars(self.text))
+      
+  def __replace_special_chars(self, text):
+    return self.smart_quotes_s.sub('\'',self.smart_quotes_d.sub('"',self.long_dash.sub('-',text)))
