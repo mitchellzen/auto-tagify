@@ -30,4 +30,6 @@ The result will be a list: ['text', 'tag', 'kitten']
 
 By default, generate() and tag_list() will be in strict mode, which means all special characters will be stripped. If generate(False) or tag_list(False) is set, then special characters will be url encoded.
 
+Also by default, generate() will treat hyperlink text (e.g. "http://mytestsite.com") as not a taggable item. To force a hyperlink to not be treated in the same manner, pass in the False parameter, such as generate(False,False) or generate(True,False), depending on your Strict mode option.
+
 These two operations are sufficient for you to maintain tag counts and tag references to text in your application.
