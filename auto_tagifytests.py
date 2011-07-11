@@ -28,15 +28,5 @@ class AutoTagifyTestCase(unittest.TestCase):
     test_array = ['test', 'other', 'valid', 'tag']
     self.assertEqual(a.tag_list(), test_array)
     
-  
-  def testLinkIsGenerated(self):
-    """
-      Verify that a hyperlink to the posted link is generated
-    """
-    a = AutoTagify()
-    a.text = 'http://test.com'
-    test_link = '<a href="http://test.com" target="_blank">http://test.com</a>'
-    self.assertEqual(a.generate(), test_link)
-    
 if __name__ == "__main__":
     unittest.main()
