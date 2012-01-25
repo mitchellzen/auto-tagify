@@ -14,10 +14,10 @@ SMART_QUOTES_D = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)|(\&#8220;)|(\&#8221;)
 SMART_QUOTES_S = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)|(\&#8216;)|(\&#8217;)')
 STOP_WORDS = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB', 'CC', 'WDT']
 
-lemma = WordNetLemmatizer()
-
 
 class AutoTagify():
+    lemma = WordNetLemmatizer()
+    
     def __init__(self):
         self.css = ''
         self.link = ''
@@ -29,12 +29,12 @@ class AutoTagify():
         for (word, word_type) in self._tokenize():
             tag_word = self._cleaned(word,strict)
             if len(tag_word) > MIN_TAG_LENGTH and word_type not in STOP_WORDS:
-                tag_words += '<a href="' + CLEAN_LINK.sub('', self.link) + '/'
-                tag_words += urllib.quote(tag_word) + '" class="'
-                tag_words += CLEAN_WORD.sub('', self.css) + '">'
-                tag_words += self._replace_special_chars(word)+'</a> '
+                tag_words = '<a href="%s/%s" class="%s">%s</a>' % (CLEAN_LINK.sub('', self.link),
+                                                                   urllib.quote(tag_word),
+                                                                   CLEAN_WORD.sub('', self.css),
+                                                                   self._replace_special_chars(word))
             else:
-                tag_words += word+' '
+                tag_words += word + ' '
         return tag_words
     
     def tag_list(self, strict=True):
