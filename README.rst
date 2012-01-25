@@ -1,3 +1,5 @@
+# Auto Tagify
+
 Auto Tagify is a simple auto tagging module that uses NLTK to generate tags out of a selection of text. Any text that is less than 3 characters long or matches a particular POS (part-of-speech) will be ignored.
 
 There are two operations Auto Tagify performs - one returns the selection of text with links embedded in the string and the other returns a list of all the taggable words as the stem word (using lemmatization).
