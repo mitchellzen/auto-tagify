@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import urllib
 
@@ -13,16 +14,17 @@ SMART_QUOTES_D = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)|(\&#8220;)|(\&#8221;)
 SMART_QUOTES_S = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)|(\&#8216;)|(\&#8217;)')
 STOP_WORDS = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB', 'CC', 'WDT']
 
+lemma = WordNetLemmatizer()
+
 
 class AutoTagify():
-    lemma = WordNetLemmatizer()
-    
     def __init__(self):
         self.css = ''
         self.link = ''
         self.text = ''
         
     def generate(self, strict=True):
+        """Return the HTML version of tags for the string."""
         tag_words = ''
         for (word, word_type) in self._tokenize():
             tag_word = self._cleaned(word,strict)
@@ -36,6 +38,10 @@ class AutoTagify():
         return tag_words
     
     def tag_list(self, strict=True):
+        """Return the tags from string as a list. If strict is set
+        to True, then only return the stemmed version. Otherwise, return the
+        full string - therefore, `cat` will be considered different from `cats`.
+        """
         tag_words = []
         for (word, word_type) in self._tokenize():
             tag_word = self._cleaned(word,strict)
@@ -44,6 +50,7 @@ class AutoTagify():
         return tag_words
 
     def _tokenize(self):
+        """Tag words from the string."""
         return nltk.pos_tag(nltk.word_tokenize(self._clean_text()))
         
     def _cleaned(self, word, strict):
