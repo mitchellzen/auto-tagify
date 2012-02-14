@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='auto_tagify',
-      version='1.2', 
+      version='1.3', 
       author='Edna Piranha',
       author_email='jen@ednapiranha.com',
       url='https://github.com/ednapiranha/auto-tagify',
