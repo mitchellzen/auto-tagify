@@ -10,6 +10,7 @@ class AutoTagifyTestCase(unittest.TestCase):
         a = AutoTagify()
         a.text = 'This is a test'
         a.css = 'taggable'
+        self.assertEqual(a.tag_list(), ['test'])
         self.assertEqual(a.generate(), 'This is a <a href="/test" class="taggable">test</a> ')
     
     def testTextNotEmptyNotStrict(self):
@@ -17,10 +18,11 @@ class AutoTagifyTestCase(unittest.TestCase):
         not null.
         """
         a = AutoTagify()
-        a.text = 'These are tests'
+        a.text = 'These are my tests'
         a.css = 'taggable'
+        self.assertEqual(a.tag_list(), ['are', 'test'])
         self.assertEqual(a.generate(strict=False),
-                         'These <a href="/are" class="taggable">are</a> <a href="/tests" class="taggable">tests</a> ')
+                         'These <a href="/are" class="taggable">are</a> my <a href="/tests" class="taggable">tests</a> ')
         
     def testTextEmpty(self):
         """Verify sending no text returns nothing."""

@@ -12,7 +12,8 @@ LONG_DASH = re.compile('(\&#8212;)')
 MIN_TAG_LENGTH = 2
 SMART_QUOTES_D = re.compile('(\xe2\x80\x9c)|(\xe2\x80\x9d)|(\&#8220;)|(\&#8221;)')
 SMART_QUOTES_S = re.compile('(\xe2\x80\x98)|(\xe2\x80\x99)|(\&#8216;)|(\&#8217;)')
-STOP_WORDS = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB', 'CC', 'WDT', 'PRP']
+STOP_WORDS = ['DT', 'IN', 'TO', 'VBD', 'VBD', 'VBG', 'VBN', 'VBZ', 'MD', 'RB',
+              'CC', 'WDT', 'PRO', 'PRP', 'PRP$']
 
 
 class AutoTagify():
